@@ -34,11 +34,10 @@ capitalize :: Array Char -> Array Char
 capitalize = mapHead Char.toUpper <<< mapTail Char.toLower
 
 uncons2 :: forall a. Array a -> Maybe { x :: a, y :: a, rest :: Array a }
-uncons2 arr = case uncons arr of
-  Just { head: x, tail: xs } -> case uncons xs of
-    Just { head: y, tail: rest } -> Just { x, y, rest }
-    Nothing -> Nothing
-  Nothing -> Nothing
+uncons2 arr = do
+  { head: x, tail: xs } <- uncons arr
+  { head: y, tail: rest } <- uncons xs
+  pure $ { x, y, rest }
 
 isSeparator :: Char -> Boolean
 isSeparator '_' = true
