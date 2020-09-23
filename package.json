@@ -8,11 +8,11 @@
   "scripts": {
     "format": "purlin format && purty --write test/",
     "build": "purlin build",
-    "test": "spago -x test/test.dhall test",
+    "test": "purlin test",
     "bump-version": "spago bump-version"
   },
   "devDependencies": {
     "bower": "^1.8.8",
-    "purlin": "^0.1.3"
+    "purlin": "^0.1.7"
   }
 }
