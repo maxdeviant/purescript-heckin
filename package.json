@@ -9,7 +9,7 @@
     "format": "purlin format && purty --write test/",
     "build": "purlin build",
     "test": "purlin test",
-    "bump-version": "spago bump-version"
+    "bump-version": "purlin bump-version"
   },
   "devDependencies": {
     "bower": "^1.8.8",
