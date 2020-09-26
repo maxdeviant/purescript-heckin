@@ -1,6 +1,6 @@
 { name = "heckin"
 , license = "MIT"
-, repository = "https://github.com/maxdeviant/heckin"
+, repository = "https://github.com/maxdeviant/purescript-heckin"
 , dependencies =
   [ "arrays"
   , "console"
