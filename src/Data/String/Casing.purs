@@ -98,9 +98,9 @@ getWords value = reverse $ catMaybes $ map stringToMaybe $ getWords' [] [] $ toC
 -- | word, which starts with a lowercase letter.
 -- |
 -- | ```purescript
--- | toCamelCase "Hello World" = "helloWorld"
--- | toCamelCase "Player ID" = "playerId"
--- | toCamelCase "XMLHttpRequest" = "xmlHttpRequest"
+-- | toCamelCase "Hello World" == "helloWorld"
+-- | toCamelCase "Player ID" == "playerId"
+-- | toCamelCase "XMLHttpRequest" == "xmlHttpRequest"
 -- | ```
 toCamelCase :: String -> String
 toCamelCase =
@@ -116,9 +116,9 @@ toCamelCase =
 -- | In PascalCase the first letter of each word is uppercase.
 -- |
 -- | ```purescript
--- | toPascalCase "Hello World" = "HelloWorld"
--- | toPascalCase "Player ID" = "PlayerId"
--- | toPascalCase "XMLHttpRequest" = "XmlHttpRequest"
+-- | toPascalCase "Hello World" == "HelloWorld"
+-- | toPascalCase "Player ID" == "PlayerId"
+-- | toPascalCase "XMLHttpRequest" == "XmlHttpRequest"
 -- | ```
 toPascalCase :: String -> String
 toPascalCase =
@@ -134,9 +134,9 @@ toPascalCase =
 -- | underscore (`_`).
 -- |
 -- | ```purescript
--- | toSnakeCase "Hello World" = "hello_world"
--- | toSnakeCase "Player ID" = "player_id"
--- | toSnakeCase "XMLHttpRequest" = "xml_http_request"
+-- | toSnakeCase "Hello World" == "hello_world"
+-- | toSnakeCase "Player ID" == "player_id"
+-- | toSnakeCase "XMLHttpRequest" == "xml_http_request"
 -- | ```
 toSnakeCase :: String -> String
 toSnakeCase =
@@ -152,9 +152,9 @@ toSnakeCase =
 -- | by an underscore (`_`).
 -- |
 -- | ```purescript
--- | toScreamingSnakeCase "Hello World" = "HELLO_WORLD"
--- | toScreamingSnakeCase "Player ID" = "PLAYER_ID"
--- | toScreamingSnakeCase "XMLHttpRequest" = "XML_HTTP_REQUEST"
+-- | toScreamingSnakeCase "Hello World" == "HELLO_WORLD"
+-- | toScreamingSnakeCase "Player ID" == "PLAYER_ID"
+-- | toScreamingSnakeCase "XMLHttpRequest" == "XML_HTTP_REQUEST"
 -- | ```
 toScreamingSnakeCase :: String -> String
 toScreamingSnakeCase =
@@ -170,9 +170,9 @@ toScreamingSnakeCase =
 -- | hyphen (`-`).
 -- |
 -- | ```purescript
--- | toKebabCase "Hello World" = "hello-world"
--- | toKebabCase "Player ID" = "player-id"
--- | toKebabCase "XMLHttpRequest" = "xml-http-request"
+-- | toKebabCase "Hello World" == "hello-world"
+-- | toKebabCase "Player ID" == "player-id"
+-- | toKebabCase "XMLHttpRequest" == "xml-http-request"
 -- | ```
 toKebabCase :: String -> String
 toKebabCase =
@@ -188,9 +188,9 @@ toKebabCase =
 -- | separated by a space (` `).
 -- |
 -- | ```purescript
--- | toTitleCase "Hello World" = "Hello World"
--- | toTitleCase "Player ID" = "Player Id"
--- | toTitleCase "XMLHttpRequest" = "Xml Http Request"
+-- | toTitleCase "Hello World" == "Hello World"
+-- | toTitleCase "Player ID" == "Player Id"
+-- | toTitleCase "XMLHttpRequest" == "Xml Http Request"
 -- | ```
 toTitleCase :: String -> String
 toTitleCase =
