@@ -1,6 +1,6 @@
 {
   "name": "purescript-heckin",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "index.js",
   "repository": "git@github.com:maxdeviant/purescript-heckin.git",
   "author": "Marshall Bowers <elliott.codes@gmail.com>",
