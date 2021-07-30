@@ -14,11 +14,17 @@
         "output"
     ],
     "dependencies": {
-        "purescript-arrays": "^v5.3.1",
-        "purescript-console": "^v4.4.0",
-        "purescript-effect": "^v2.0.1",
-        "purescript-foldable-traversable": "^v4.1.1",
-        "purescript-psci-support": "^v4.0.0",
-        "purescript-unicode": "^v4.0.1"
+        "purescript-aff": "^v6.0.0",
+        "purescript-arrays": "^v6.0.1",
+        "purescript-effect": "^v3.0.0",
+        "purescript-foldable-traversable": "^v5.0.1",
+        "purescript-maybe": "^v5.0.0",
+        "purescript-prelude": "^v5.0.1",
+        "purescript-psci-support": "^v5.0.0",
+        "purescript-spec": "^v5.0.1",
+        "purescript-strings": "^v5.0.0",
+        "purescript-transformers": "^v5.1.0",
+        "purescript-tuples": "^v6.0.1",
+        "purescript-unicode": "^v5.0.0"
     }
 }
