@@ -8,11 +8,11 @@ module Data.String.Casing
   ) where
 
 import Prelude
-import Data.Array (all, catMaybes, concat, reverse, snoc, uncons, (:))
-import Data.Char.Unicode as Char
+import Data.Array (all, catMaybes, concat, elem, reverse, snoc, uncons, (:))
+import Data.CodePoint.Unicode as CodePoint
 import Data.Foldable (intercalate)
 import Data.Maybe (Maybe(..))
-import Data.String.CodeUnits (fromCharArray, toCharArray)
+import Data.String.CodePoints (CodePoint, codePointFromChar, fromCodePointArray, toCodePointArray)
 import Data.Tuple (Tuple(..))
 
 stringToMaybe :: String -> Maybe String
@@ -30,8 +30,8 @@ mapTail mapping arr = case uncons arr of
   Just { head: x, tail: xs } -> x : map mapping xs
   Nothing -> arr
 
-capitalize :: Array Char -> Array Char
-capitalize = mapHead Char.toUpper <<< mapTail Char.toLower
+capitalize :: Array CodePoint -> Array CodePoint
+capitalize = mapHead CodePoint.toUpperSimple <<< mapTail CodePoint.toLowerSimple
 
 uncons2 :: forall a. Array a -> Maybe { x :: a, y :: a, rest :: Array a }
 uncons2 arr = do
@@ -39,33 +39,29 @@ uncons2 arr = do
   { head: y, tail: rest } <- uncons xs
   pure $ { x, y, rest }
 
-isSeparator :: Char -> Boolean
-isSeparator '_' = true
+isSeparator :: CodePoint -> Boolean
+isSeparator codePoint = elem codePoint separators
+  where
+  separators = [ '_', '-', ' ' ] # map codePointFromChar
 
-isSeparator '-' = true
-
-isSeparator ' ' = true
-
-isSeparator _ = false
-
-isBoundary :: Char -> Char -> Boolean
+isBoundary :: CodePoint -> CodePoint -> Boolean
 isBoundary _currentChar nextChar
   | isSeparator nextChar = true
 
-isBoundary currentChar nextChar = Char.isLower currentChar && Char.isUpper nextChar
+isBoundary currentChar nextChar = CodePoint.isLower currentChar && CodePoint.isUpper nextChar
 
 getWords :: String -> Array String
-getWords value = reverse $ catMaybes $ map stringToMaybe $ getWords' [] [] $ toCharArray value
+getWords value = reverse $ catMaybes $ map stringToMaybe $ getWords' [] [] $ toCodePointArray value
   where
-  getWords' :: Array Char -> Array String -> Array Char -> Array String
-  getWords' currentWord acc [] = fromCharArray currentWord : acc
+  getWords' :: Array CodePoint -> Array String -> Array CodePoint -> Array String
+  getWords' currentWord acc [] = fromCodePointArray currentWord : acc
 
-  getWords' currentWord acc [ singleChar ] = fromCharArray (currentWord `snoc` singleChar) : acc
+  getWords' currentWord acc [ singleChar ] = fromCodePointArray (currentWord `snoc` singleChar) : acc
 
   getWords' currentWord acc chars = case uncons2 chars of
     Just { x: currentChar, y: nextChar, rest: remainingChars } ->
       let
-        appendCurrentChar :: Array Char -> Array Char
+        appendCurrentChar :: Array CodePoint -> Array CodePoint
         appendCurrentChar word =
           if isSeparator currentChar then
             word
@@ -74,14 +70,14 @@ getWords value = reverse $ catMaybes $ map stringToMaybe $ getWords' [] [] $ toC
 
         (Tuple currentWord' acc') =
           if isBoundary currentChar nextChar then
-            Tuple "" (fromCharArray (appendCurrentChar currentWord) : acc)
+            Tuple "" (fromCodePointArray (appendCurrentChar currentWord) : acc)
           else
-            if all Char.isUpper currentWord
-              && Char.isUpper currentChar
-              && Char.isLower nextChar then
-              Tuple (fromCharArray $ appendCurrentChar []) (fromCharArray currentWord : acc)
+            if all CodePoint.isUpper currentWord
+              && CodePoint.isUpper currentChar
+              && CodePoint.isLower nextChar then
+              Tuple (fromCodePointArray $ appendCurrentChar []) (fromCodePointArray currentWord : acc)
             else
-              Tuple (fromCharArray $ appendCurrentChar currentWord) acc
+              Tuple (fromCodePointArray $ appendCurrentChar currentWord) acc
 
         remainingChars' =
           if not $ isSeparator nextChar then
@@ -89,7 +85,7 @@ getWords value = reverse $ catMaybes $ map stringToMaybe $ getWords' [] [] $ toC
           else
             remainingChars
       in
-        getWords' (toCharArray currentWord') acc' remainingChars'
+        getWords' (toCodePointArray currentWord') acc' remainingChars'
     Nothing -> acc
 
 -- | Converts the given string to camelCase.
@@ -105,10 +101,10 @@ getWords value = reverse $ catMaybes $ map stringToMaybe $ getWords' [] [] $ toC
 toCamelCase :: String -> String
 toCamelCase =
   intercalate ""
-    <<< map fromCharArray
+    <<< map fromCodePointArray
     <<< mapTail capitalize
-    <<< mapHead (map Char.toLower)
-    <<< map toCharArray
+    <<< mapHead (map CodePoint.toLowerSimple)
+    <<< map toCodePointArray
     <<< getWords
 
 -- | Converts the given string to PascalCase.
@@ -123,9 +119,9 @@ toCamelCase =
 toPascalCase :: String -> String
 toPascalCase =
   intercalate ""
-    <<< map fromCharArray
+    <<< map fromCodePointArray
     <<< map capitalize
-    <<< map toCharArray
+    <<< map toCodePointArray
     <<< getWords
 
 -- | Converts the given string to snake_case.
@@ -141,9 +137,9 @@ toPascalCase =
 toSnakeCase :: String -> String
 toSnakeCase =
   intercalate "_"
-    <<< map fromCharArray
-    <<< map (map Char.toLower)
-    <<< map toCharArray
+    <<< map fromCodePointArray
+    <<< map (map CodePoint.toLowerSimple)
+    <<< map toCodePointArray
     <<< getWords
 
 -- | Converts the given string to SCREAMING_SNAKE_CASE.
@@ -159,9 +155,9 @@ toSnakeCase =
 toScreamingSnakeCase :: String -> String
 toScreamingSnakeCase =
   intercalate "_"
-    <<< map fromCharArray
-    <<< map (map Char.toUpper)
-    <<< map toCharArray
+    <<< map fromCodePointArray
+    <<< map (map CodePoint.toUpperSimple)
+    <<< map toCodePointArray
     <<< getWords
 
 -- | Converts the given string to kebab-case.
@@ -177,9 +173,9 @@ toScreamingSnakeCase =
 toKebabCase :: String -> String
 toKebabCase =
   intercalate "-"
-    <<< map fromCharArray
-    <<< map (map Char.toLower)
-    <<< map toCharArray
+    <<< map fromCodePointArray
+    <<< map (map CodePoint.toLowerSimple)
+    <<< map toCodePointArray
     <<< getWords
 
 -- | Converts the given string to Title Case.
@@ -195,7 +191,7 @@ toKebabCase =
 toTitleCase :: String -> String
 toTitleCase =
   intercalate " "
-    <<< map fromCharArray
+    <<< map fromCodePointArray
     <<< map capitalize
-    <<< map toCharArray
+    <<< map toCodePointArray
     <<< getWords
